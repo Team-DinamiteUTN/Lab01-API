@@ -18,18 +18,21 @@ router.get('/', function (req, res) {
    });
 });
 
-//Metodo que optiene un ave con su id
-router.get('/:id', function (req, res) {
-    Bird.findById(req.params.id, (err, bird) => {
-        if(err) {
-            return res.status(500).json({ message: 'Error obteniendo el ave', err });
+
+router.get('/:id', function (req,res){
+    Bird.find({_id:req.params.id},[],(err,birds) =>{
+        if(birds.length === 0){
+            birds = {'birds': 'List is empty'}
         }
-        if(!bird){
-            return res.status(404).json({ message: 'Error con las aves' });
-        }
-        res.json({ status_code: 200, status_message: 'Ok', data: bird });
-    });
+        salida = {
+            status_code:200,
+            status_message: 'Ok',
+            data: birds
+        };
+        res.set('Content-Type', 'application/json').status(200).send(salida);
+    })
 });
+
 
 //Metodo que agrega un ave con su id
 router.post('/', function(req, res) {

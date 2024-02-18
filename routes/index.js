@@ -6,8 +6,8 @@ router.get('/', function(req, res) {
     status_code:200,
     status_message: 'Ok',
     data:{
-      title: 'Article Express....!',
-      description: 'An example to register text like as newspaper articles.'
+      title: 'Aves de Costa Rica',
+      description: 'Aplicacion dedicada a información de las aves de Costa Rica'
     }
   };
   res.set('Content-Type', 'application/json').status(200).send(salida);
