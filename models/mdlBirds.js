@@ -3,8 +3,8 @@ var mongoose = require("mongoose");
 var schBird = new mongoose.Schema({
   name: { type: String, required: [true, "Este campo es requerido"] },
   description: { type: String, required: [true, "Este campo es requerido"] },
-  birdImage: { type: String, required: [true, "Este campo es requerido"] }, // Este campo almacenará la URL de la imagen
-  comments: [
+  birdImage: { type: Buffer },  
+   comments: [
     {
       type: Object,
       properties: {

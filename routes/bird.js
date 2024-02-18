@@ -1,9 +1,39 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
+var multer = require('multer');
+var path = require('path');
 
 require('../models/mdlBirds');
 var Bird = mongoose.model('Birds');
+
+// Configuración de multer para almacenamiento de imágenes
+var storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, 'public/uploads/'); // Directorio que se debe crear en la raiz del api
+  },
+  filename: function(req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+
+var upload = multer({ storage: storage });
+
+router.post('/upload', upload.single('image'), function(req, res) {
+    var newBird = new Bird({
+        name: req.body.name,
+        description: req.body.description,
+        birdImage: req.file ? req.file.path : undefined,
+        comments: req.body.comments ? JSON.parse(req.body.comments) : [] 
+    });
+    
+    newBird.save((err, bird) => {
+        if (err) {
+            return res.status(500).json({ message: 'Error guardando el ave', err });
+        }
+        res.status(201).json({ status_code: 201, status_message: 'El ave se creó con imagen', data: bird });
+    });
+});
 
 //Metodo que optiene todas las aves
 router.get('/', function (req, res) {
